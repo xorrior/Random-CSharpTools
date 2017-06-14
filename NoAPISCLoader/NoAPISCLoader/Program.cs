@@ -10,8 +10,8 @@ using System.IO;
 /*
  * Author: Chris Ross (@xorrior), ported from @mattefistation's Invoke-ShellcodeMSIL script.
  * Your desired shellcode should be placed in either scx64.txt or scx86.txt for the appropriate architecture 
- * I find this method of loading shellcode 
- * 
+ * I find this method of loading shellcode interesting because it does not require any of the typical Win API 
+ * calls found in other shellcode loaders.
  * 
  */
 
