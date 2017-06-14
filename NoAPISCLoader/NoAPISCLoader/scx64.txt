@@ -1,0 +1,1 @@
+﻿//Store your Base64 x64 shellcode here. Make sure to append 0xc3 (ret) to shellcode//
