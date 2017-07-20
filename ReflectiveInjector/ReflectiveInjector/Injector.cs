@@ -39,8 +39,14 @@ namespace ReflectiveInjector
 
         public bool Load()
         {
-            //TODO: Function to load dll into the current process call reflective loader function.
-            return false;
+            //Allocate memory locally for the process
+            uint alloc_type = (MEM_COMMIT | MEM_RESERVE);
+            baseAddress = VirtualAlloc(IntPtr.Zero, (UIntPtr)pe.Length, alloc_type, 0x40 /*PAGE_READ_Write_Execute*/);
+#if DEBUG
+            Console.WriteLine("Allocated memory locally at address: "+baseAddress.ToString("X8"));
+#endif
+
+            return LoadLibrary();
         }
 
         public bool Inject()
@@ -65,6 +71,35 @@ namespace ReflectiveInjector
             return LoadRemoteLibrary();
         }
 
+        private bool LoadLibrary()
+        {
+            //Function to load the library locally
+            
+            //Find the offset of the ReflectiveLoaderFunction locally
+            ReflectiveLoaderOffset = FindReflectiveLoaderOffset();
+            if (ReflectiveLoaderOffset != 0)
+            {
+                Marshal.Copy(pe, 0, baseAddress, pe.Length);
+#if DEBUG
+                Console.WriteLine("Copied PE to baseAddress");
+#endif
+                IntPtr LocalReflectiveLoader = (IntPtr)(baseAddress.ToInt64() + ReflectiveLoaderOffset);
+
+#if DEBUG 
+                Console.WriteLine("Local offset to Reflective Loader function: " + LocalReflectiveLoader.ToString("X8"));
+#endif
+                uint ThreadId = 0;
+                hThread = (IntPtr)CreateThread(IntPtr.Zero, 0, LocalReflectiveLoader, IntPtr.Zero, 0, out ThreadId);
+
+#if DEBUG
+                Console.WriteLine("Called CreateThread locally, thread handle: " + hThread.ToString("X8"));
+#endif
+                CloseHandle(hThread);
+                return true;
+            }
+
+            return false;
+        }
         private unsafe bool LoadRemoteLibrary()
         {
             fixed(byte* buffer = pe)
@@ -282,6 +317,15 @@ namespace ReflectiveInjector
         uint ReflectiveLoaderOffset;
         bool IsWow64;
 
+        [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern uint CreateThread(
+            IntPtr lpThreadAttributes,
+            uint dwStackSize,
+            IntPtr lpStartAddress,
+            IntPtr lpParameter,
+            uint dwCreationFlags,
+            out uint lpThreadId);
+
         [DllImport("ntdll.dll", SetLastError = true)]
         public static extern UInt32 NtCreateThreadEx(ref IntPtr hThread,
             UInt32 DesiredAccess,
@@ -319,6 +363,13 @@ namespace ReflectiveInjector
             IntPtr lpAddress, 
             IntPtr dwSize, 
             uint flAllocationType, 
+            uint flProtect);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr VirtualAlloc(
+            IntPtr lpAddress,
+            UIntPtr dwSize,
+            uint flAllocationType,
             uint flProtect);
 
         [DllImport("kernel32.dll", SetLastError = true)]
