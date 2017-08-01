@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReflectiveInjector", "ReflectiveInjector\ReflectiveInjector.csproj", "{F7FC19DA-67A3-437D-B3B0-2A257F77A00B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{46B54E49-077F-4C33-A299-F9C024057EB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{F7FC19DA-67A3-437D-B3B0-2A257F77A00B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F7FC19DA-67A3-437D-B3B0-2A257F77A00B}.Release|x64.ActiveCfg = Release|x64
 		{F7FC19DA-67A3-437D-B3B0-2A257F77A00B}.Release|x64.Build.0 = Release|x64
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Debug|x64.Build.0 = Debug|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Release|x64.ActiveCfg = Release|Any CPU
+		{46B54E49-077F-4C33-A299-F9C024057EB9}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

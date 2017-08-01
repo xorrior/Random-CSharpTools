@@ -37,8 +37,9 @@ namespace ReflectiveInjector
             pe = File.ReadAllBytes(dllpath);
         }
 
-        public bool Load()
+        public bool Load(string FunctionName = "ReflectiveLoader")
         {
+            Export = FunctionName;
             //Allocate memory locally for the process
             uint alloc_type = (MEM_COMMIT | MEM_RESERVE);
             baseAddress = VirtualAlloc(IntPtr.Zero, (UIntPtr)pe.Length, alloc_type, 0x40 /*PAGE_READ_Write_Execute*/);
@@ -49,9 +50,10 @@ namespace ReflectiveInjector
             return LoadLibrary();
         }
 
-        public bool Inject()
+        public bool Inject(string FunctionName = "ReflectiveLoader")
         {
             bool success = false;
+            Export = FunctionName;
 #if DEBUG
             Console.WriteLine("In Inject function");
 #endif
@@ -76,7 +78,7 @@ namespace ReflectiveInjector
             //Function to load the library locally
             
             //Find the offset of the ReflectiveLoaderFunction locally
-            ReflectiveLoaderOffset = FindReflectiveLoaderOffset();
+            ReflectiveLoaderOffset = FindExportOffset();
             if (ReflectiveLoaderOffset != 0)
             {
                 Marshal.Copy(pe, 0, baseAddress, pe.Length);
@@ -105,7 +107,7 @@ namespace ReflectiveInjector
             fixed(byte* buffer = pe)
             {
                 //Find the offset of the ReflectiveLoaderFunction
-                ReflectiveLoaderOffset = FindReflectiveLoaderOffset();
+                ReflectiveLoaderOffset = FindExportOffset();
                 if (ReflectiveLoaderOffset != 0)
                 {
                     uint alloc_type = (MEM_COMMIT | MEM_RESERVE);
@@ -158,11 +160,11 @@ namespace ReflectiveInjector
             return false;
         }
 
-        private unsafe uint FindReflectiveLoaderOffset()
+        private unsafe uint FindExportOffset()
         {
             //http://www.sunshine2k.de/reversing/tuts/tut_pe.htm
 #if DEBUG
-            Console.WriteLine("In FindReflectiveLoaderOffset function.");
+            Console.WriteLine("In FindExportOffset function.");
 #endif
             IMAGE_EXPORT_DIRECTORY ExpDir;
             //Function for finding the Rva of the reflective loader
@@ -174,7 +176,7 @@ namespace ReflectiveInjector
                 numberOfSections = *((ushort*)(pe_header + 6));
                 ushort machineType = *((ushort*)(pe_header + 4));
 #if DEBUG
-                Console.WriteLine("Parsing pe for ReflectiveLoaderOffset");
+                Console.WriteLine("Parsing pe for Function Export offset");
                 Console.WriteLine("Machine: " + machineType.ToString("x2"));
 #endif
                 if (IntPtr.Size == 8 && machineType != 0x8664)
@@ -249,13 +251,13 @@ namespace ReflectiveInjector
                     char* funcNamePtr = (char*)(buffer + RvaToFileOffset(nameRva));
                     string funcName = Marshal.PtrToStringAnsi((IntPtr)funcNamePtr);
                     //Looking for a function name that starts with ?ReflectiveLoader
-                    if (funcName.Contains("ReflectiveLoader"))
+                    if (funcName.Contains(Export))
                     {
                         uint nameOrdinal = (uint)Marshal.ReadInt16((IntPtr)uiNameOrdinals);
                         uiAddressArray += (nameOrdinal * 4);
                         uint functionRva = (uint)Marshal.ReadInt32((IntPtr)uiAddressArray);
 #if DEBUG
-                        Console.WriteLine("Found ReflectiveLoader RVA: " + functionRva.ToString("X8"));
+                        Console.WriteLine("Found Dll Export RVA: " + functionRva.ToString("X8"));
 #endif
                         return RvaToFileOffset(functionRva);
                     }
@@ -313,6 +315,7 @@ namespace ReflectiveInjector
         unsafe byte* pe_header = null;
         unsafe byte* optional_hdr = null;
         ushort numberOfSections;
+        string Export = "";
 
         uint ReflectiveLoaderOffset;
         bool IsWow64;
