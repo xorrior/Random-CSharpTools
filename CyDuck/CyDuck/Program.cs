@@ -91,7 +91,7 @@ namespace CyDuck
 #if DEBUG 
                 Console.WriteLine("Attaching to process with pid: " + targetPID);
 #endif
-                dt = DataTarget.AttachToProcess(pid, 10000, AttachFlag.Invasive);
+                dt = DataTarget.AttachToProcess(pid, 10000, AttachFlag.NonInvasive);
             }
             catch (Exception e)
             {
@@ -165,7 +165,7 @@ namespace CyDuck
 #if DEBUG
                 Console.WriteLine("Attaching to target process with pid: " + pid);
 #endif
-                dt = DataTarget.AttachToProcess(pid, 10000, AttachFlag.Invasive);
+                dt = DataTarget.AttachToProcess(pid, 10000, AttachFlag.NonInvasive);
             }
             catch (Exception e)
             {
