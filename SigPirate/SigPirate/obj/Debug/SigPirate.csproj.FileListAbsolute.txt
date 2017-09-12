@@ -1,0 +1,6 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\bin\Debug\SigPirate.exe.config
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\obj\Debug\SigPirate.csprojResolveAssemblyReference.cache
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\bin\Debug\SigPirate.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\bin\Debug\SigPirate.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\obj\Debug\SigPirate.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\obj\Debug\SigPirate.pdb

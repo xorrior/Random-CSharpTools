@@ -29,9 +29,6 @@ namespace CyDuck
                 {"help", "Show the help menu", v => help = v != null }
             };
 
-            //Check if the user has administrative permissions.
-            if (!IsAdmin())
-                Console.WriteLine("Administratrive Privileges needed for disabling Memory Defense and Script Control");
 
             try
             {
@@ -42,20 +39,19 @@ namespace CyDuck
                 Console.WriteLine(e.Message);
             }
 
-            if(help)
+            if(help || targetPID == 0)
             {
                 Console.WriteLine("Usage: CyDuck.exe [options]");
                 Console.WriteLine("Copyright (c) Chris Ross 2017. Licensed under BSD-3 Clause");
                 Console.WriteLine("Options:\r\n");
                 opts.WriteOptionDescriptions(Console.Error);
+                System.Environment.Exit(0);
             }
 
-            if (targetPID == 0)
+            if (!IsAdmin())
             {
-#if DEBUG
-                Console.WriteLine("Process ID required");
-#endif
-                Environment.Exit(0);
+                Console.WriteLine("Administratrive Privileges needed for disabling Memory Defense and Script Control");
+                System.Environment.Exit(0);
             }
 
             if (disarmMemDef)
@@ -243,7 +239,7 @@ namespace CyDuck
             Console.WriteLine("Successfully wrote " + bytesWritten.ToString() + " byte/s to the target process");
 #endif
             CloseHandle(hProcess);
-            return new KeyValuePair<bool, string>(true, "Memory Defense disabled");
+            return new KeyValuePair<bool, string>(true, "Success");
         }
 
         private static KeyValuePair<ClrInstanceField, string> GetField(string fieldName, string typeName, ClrHeap Heap)

@@ -1,0 +1,6 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\Debug\NetDump.exe.config
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\Debug\NetDump.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\Debug\NetDump.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\obj\Debug\NetDump.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\obj\Debug\NetDump.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\Debug\Microsoft.Diagnostics.Runtime.v3.5.dll
