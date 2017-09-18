@@ -10,6 +10,9 @@ using System.Text;
 /// Author: Chris Ross @xorrior
 /// License: BSD3-Clause
 /// Purpose: Clone Authenticode or Catalog signatures from one binary to an unsigned binary
+/// References: 
+/// Jared Atkinson's PSReflect-Functions project: https://github.com/jaredcatkinson/PSReflect-Functions/tree/master/wintrust
+/// Matt Graeber's blog post: http://www.exploit-monday.com/2017/08/application-of-authenticode-signatures.html
 /// </summary>
 
 namespace SigPirate
