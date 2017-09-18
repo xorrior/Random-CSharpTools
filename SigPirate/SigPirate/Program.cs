@@ -71,9 +71,8 @@ namespace SigPirate
             //If we are just getting the authenticode signature
             if (authenticodeTheft)
             {
-#if DEBUG
-                Console.WriteLine("[+] Stealing authenticode signature...");
-#endif
+                Console.WriteLine("[+] Copying authenticode signature...");
+
                 try
                 {
 #if DEBUG 
@@ -94,6 +93,8 @@ namespace SigPirate
             else
             {
                 //Otherwise try to copy the Calatog signature
+                Console.WriteLine("[+] Copying catalog signature...");
+
                 KeyValuePair<bool, string> result = CheckForCatalog();
                 if(!result.Key)
                 {
@@ -274,9 +275,8 @@ namespace SigPirate
 
         private static unsafe void UpdateSecurityDirectoryEntry()
         {
-#if DEBUG
             Console.WriteLine("[+] Updating target PE....");
-#endif
+
 
             fixed(byte* buffer = signedPE)
             {
@@ -313,10 +313,10 @@ namespace SigPirate
 
                     secDirRVA = *((uint*)(optional_hdr + 144));
                     secDirSize = *((uint*)(optional_hdr + 148));
-#if DEBUG 
+
                     Console.WriteLine("Updated Security Directory Entry VA: " + secDirRVA.ToString("X8"));
                     Console.WriteLine("Updated Security Directory Entry Size: " + secDirSize.ToString("X8"));
-#endif
+
                 }
                 else
                 {
@@ -330,10 +330,9 @@ namespace SigPirate
 
                     secDirRVA = *((uint*)(optional_hdr + 128));
                     secDirSize = *((uint*)(optional_hdr + 132));
-#if DEBUG
+
                     Console.WriteLine("Updated Security Directory Entry VA: " + secDirRVA.ToString("X8"));
                     Console.WriteLine("Updated Security Directory Entry Size: " + secDirSize.ToString("X8"));
-#endif
                 }
             }
         }
