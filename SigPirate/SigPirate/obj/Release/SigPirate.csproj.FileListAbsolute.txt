@@ -1,0 +1,5 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\bin\Release\SigPirate.exe.config
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\bin\Release\SigPirate.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\bin\Release\SigPirate.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\obj\Release\SigPirate.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\SigPirate\SigPirate\obj\Release\SigPirate.pdb

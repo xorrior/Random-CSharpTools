@@ -1,0 +1,5 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\x64\Release\NetDump.exe.config
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\x64\Release\NetDump.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\bin\x64\Release\NetDump.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\obj\x64\Release\NetDump.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\NetDump\NetDump\obj\x64\Release\NetDump.pdb

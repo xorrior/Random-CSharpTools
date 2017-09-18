@@ -16,7 +16,7 @@ namespace NetDump
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             OptionSet opts = new OptionSet()
             {
@@ -37,7 +37,7 @@ namespace NetDump
                 Console.WriteLine(e.Message);
             }
 
-            if(help == true || targetPID == 0)
+            if (help == true || targetPID == 0)
             {
                 Console.WriteLine("Usage: NetDump.exe [options]");
                 Console.WriteLine("Copyright (c) Chris Ross 2017. Licensed under BSD-3 Clause");
@@ -51,7 +51,7 @@ namespace NetDump
             if (result.Key)
             {
                 Console.WriteLine(result.Value.ToString());
-                
+
                 Console.WriteLine("[+] Complete");
             }
             else
@@ -67,7 +67,7 @@ namespace NetDump
                 Console.WriteLine("[+] No results");
         }
 
-        private static KeyValuePair<bool,string> Enumerate()
+        private static KeyValuePair<bool, string> Enumerate()
         {
             //Attach to target process
             DataTarget dt = null;
@@ -91,12 +91,12 @@ namespace NetDump
             }
 #endif
 
-            ClrInfo ClrVersion = dt.ClrVersions[0];
-            
+            ClrInfo Version = dt.ClrVersions[0];
+
 
             try
             {
-                cRun = ClrVersion.CreateRuntime();
+                cRun = Version.CreateRuntime();
 #if DEBUG
                 Console.WriteLine("[+] Created Runtime");
 #endif
@@ -108,10 +108,10 @@ namespace NetDump
 #endif
                 return new KeyValuePair<bool, string>(false, e.ToString());
             }
-            
+
 
             ClrHeap Heap = cRun.GetHeap();
-            
+
             //if we can't walk the heap, return
             if (!Heap.CanWalkHeap)
                 return new KeyValuePair<bool, string>(false, "[!] Unable to walk the heap");
@@ -124,7 +124,7 @@ namespace NetDump
             {
                 //Grab each object, check if it has a simple value, if so, display it
                 ClrType type = Heap.GetObjectType(obj);
-                
+
                 if (type == null || Regex.IsMatch(type.Name, m) || Regex.IsMatch(type.Name, m1) || Regex.IsMatch(type.Name, m2) || type.Name == "Free")
                     continue;
 
@@ -138,24 +138,54 @@ namespace NetDump
                     //Enumerate all of the instance fields for the given type
                     if (showFields)
                     {
-                        if(type.Fields != null)
+                        if (type.Fields != null)
                             GetInstanceFields(type.Fields, obj);
                     }
 
-                    
+
                     if (showstaticFields)
                     {
-                        if(type.StaticFields != null)
+                        if (type.StaticFields != null)
                             GetStaticFields(type.StaticFields, cRun.AppDomains[0]);
                     }
 
-                    if(showMethods)
+                    if (showMethods)
                     {
                         if (type.Methods != null)
                             GetMethods(type.Methods);
                     }
+
+                    if (referenceObjects)
+                    {
+                        resultOutput.Append("\r\nReferencedTypes\r\n\r\n");
+                        List<ulong> referencedObjects = ClrMDHelper.GetReferencedObjects(Heap, obj);
+                        foreach (ulong refObj in referencedObjects)
+                        {
+                            ClrType refObjType = Heap.GetObjectType(refObj);
+                            if (refObjType == null || Regex.IsMatch(refObjType.Name, m) || Regex.IsMatch(refObjType.Name, m1) || Regex.IsMatch(refObjType.Name, m2) || refObjType.Name == "Free")
+                                continue;
+
+                            if (showFields)
+                            {
+                                if (refObjType.Fields != null)
+                                    GetInstanceFields(refObjType.Fields, obj);
+                            }
+
+                            if (showstaticFields)
+                            {
+                                if (refObjType.StaticFields != null)
+                                    GetStaticFields(refObjType.StaticFields, cRun.AppDomains[0]);
+                            }
+
+                            if (showMethods)
+                            {
+                                if (refObjType.Methods != null)
+                                    GetMethods(refObjType.Methods);
+                            }
+                        }
+                    }
                 }
-                
+
             }
 
             return new KeyValuePair<bool, string>(true, "[+] Successfully walked the heap.");
@@ -168,18 +198,32 @@ namespace NetDump
             Console.WriteLine("[+] Grabbing instance fields");
 #endif
             resultOutput.Append("\r\nInstanceFields\r\n\r\n");
-            foreach(ClrInstanceField var in fields)
+            foreach (ClrInstanceField var in fields)
             {
-                if(var.HasSimpleValue && var.ElementType == ClrElementType.String)
+                if (var.HasSimpleValue && var.ElementType == ClrElementType.String)
                 {
-                    fieldValue = var.GetValue(obj);
+                    try
+                    {
+                        fieldValue = var.GetValue(obj);
+                    }
+                    catch (Exception)
+                    {
+                        fieldValue = "";
+                    }
                     object[] args = new object[] { var.Name, var.HasSimpleValue.ToString(), fieldValue };
                     resultOutput.AppendLine(string.Format("{0,-35} {1,-10} {2,-10}", args));
                 }
-                else if(var.HasSimpleValue)
+                else if (var.HasSimpleValue)
                 {
                     //treat everything else as a pointer
-                    fieldValue = var.GetValue(obj);
+                    try
+                    {
+                        fieldValue = var.GetValue(obj);
+                    }
+                    catch (Exception)
+                    {
+                        fieldValue = "";
+                    }
                     object[] args = new object[] { var.Name, var.HasSimpleValue.ToString(), fieldValue.ToString() };
                     resultOutput.AppendLine(string.Format("{0,-35} {1,-10} {2,-10}", args));
                 }
@@ -198,14 +242,29 @@ namespace NetDump
                 if (var.HasSimpleValue && var.ElementType == ClrElementType.String)
                 {
 
-                    fieldValue = var.GetValue(app);
+                    try
+                    {
+                        fieldValue = var.GetValue(app);
+                    }
+                    catch (Exception)
+                    {
+                        fieldValue = "";
+                    }
                     object[] args = new object[] { var.Name, var.HasSimpleValue.ToString(), fieldValue };
                     resultOutput.AppendLine(string.Format("{0,-35} {1,-10} {2,-10}", args));
                 }
                 else if (var.HasSimpleValue)
                 {
                     //treat everything else as a pointer
-                    fieldValue = var.GetValue(app);
+                    try
+                    {
+                        fieldValue = var.GetValue(app);
+                    }
+                    catch (Exception)
+                    {
+                        fieldValue = "";
+                    }
+                    
                     object[] args = new object[] { var.Name, var.HasSimpleValue.ToString(), fieldValue.ToString() };
                     resultOutput.AppendLine(string.Format("{0,-35} {1,-10} {2,-10}", args));
                 }
@@ -220,7 +279,7 @@ namespace NetDump
             resultOutput.Append("\r\nMethods\r\n\r\n");
             foreach (ClrMethod m in methods)
             {
-                if(!m.IsConstructor || !m.IsClassConstructor || !m.IsPInvoke || !m.IsRTSpecialName || !m.IsSpecialName)
+                if (!m.IsConstructor || !m.IsClassConstructor || !m.IsPInvoke || !m.IsRTSpecialName || !m.IsSpecialName)
                 {
                     object[] args = new object[] { m.Name, m.NativeCode.ToString("X8"), m.GetFullSignature() };
                     resultOutput.AppendLine(string.Format("{0,-35} {1,-10} {2,-10}", args));

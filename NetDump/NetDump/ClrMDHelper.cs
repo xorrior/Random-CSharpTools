@@ -1,7 +1,7 @@
 ﻿using Microsoft.Diagnostics.Runtime;
 using System.Collections.Generic;
 
-namespace KeeTheft
+namespace NetDump
 {
     class ClrMDHelper
     {
