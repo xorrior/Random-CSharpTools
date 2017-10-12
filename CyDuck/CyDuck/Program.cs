@@ -22,7 +22,6 @@ namespace CyDuck
         {
             OptionSet opts = new OptionSet()
             {
-                {"enumerate", "Enumerate .NET assembly for CylanceSvc process", v => enumerate = v != null },
                 {"p=|pid=","ProcessId of the CylanceSvc", (int v) =>  targetPID = v},
                 {"DisableMemDef","Disable Cylance Memory Defense", v => disarmMemDef = v != null },
                 {"DisableScriptControl", "Disable Cylance Script Control", v => disarmScriptCntrl = v != null },

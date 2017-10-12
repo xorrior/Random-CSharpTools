@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace NetDump
 {
-    class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
@@ -22,6 +22,9 @@ namespace NetDump
             {
                 {"r|refObjects", "Dump reference objects and their values, if possible.", v => referenceObjects = v != null },
                 {"f|fields", "Show the value of a field, if the field HasSimpleValue property is true", v => showFields = v != null },
+                {"fn|fieldName", "Only show fields that match this name", (string v) =>  fieldName = v},
+                {"mn|MethodName", "Only show Methods that match this name", (string v) => MethodName = v },
+                {"tn|TypeName", "Only show types that match this name", (string v) => TypeName = v },
                 { "sf|staticFields", "Show the values of a static field, if the field HasSimpleValue is true", v => showstaticFields = v != null },
                 {"m|methods", "Enumerate all of the available methods for each type", v => showMethods = v != null },
                 {"p=|pid=","ProcessId of the managed process", (int v) =>  targetPID = v},
@@ -125,8 +128,16 @@ namespace NetDump
                 //Grab each object, check if it has a simple value, if so, display it
                 ClrType type = Heap.GetObjectType(obj);
 
-                if (type == null || Regex.IsMatch(type.Name, m) || Regex.IsMatch(type.Name, m1) || Regex.IsMatch(type.Name, m2) || type.Name == "Free")
-                    continue;
+                if (TypeName != null)
+                {
+                    if (type == null && type.Name == TypeName || Regex.IsMatch(type.Name, m) || Regex.IsMatch(type.Name, m1) || Regex.IsMatch(type.Name, m2) || type.Name == "Free")
+                        continue;
+                }
+                else
+                {
+                    if (type == null || Regex.IsMatch(type.Name, m) || Regex.IsMatch(type.Name, m1) || Regex.IsMatch(type.Name, m2) || type.Name == "Free")
+                        continue;
+                }
 
                 if (!type.IsPrimitive)
                 {
@@ -168,13 +179,13 @@ namespace NetDump
                             if (showFields)
                             {
                                 if (refObjType.Fields != null)
-                                    GetInstanceFields(refObjType.Fields, obj);
+                                    GetInstanceFields(refObjType.Fields, obj, fieldName);
                             }
 
                             if (showstaticFields)
                             {
                                 if (refObjType.StaticFields != null)
-                                    GetStaticFields(refObjType.StaticFields, cRun.AppDomains[0]);
+                                    GetStaticFields(refObjType.StaticFields, cRun.AppDomains[0], fieldName);
                             }
 
                             if (showMethods)
@@ -191,7 +202,7 @@ namespace NetDump
             return new KeyValuePair<bool, string>(true, "[+] Successfully walked the heap.");
         }
 
-        private static void GetInstanceFields(IList<ClrInstanceField> fields, ulong obj)
+        private static void GetInstanceFields(IList<ClrInstanceField> fields, ulong obj, string fName=null)
         {
             object fieldValue;
 #if DEBUG 
@@ -230,7 +241,7 @@ namespace NetDump
             }
         }
 
-        private static void GetStaticFields(IList<ClrStaticField> fields, ClrAppDomain app)
+        private static void GetStaticFields(IList<ClrStaticField> fields, ClrAppDomain app, string fName=null)
         {
             object fieldValue;
 #if DEBUG
@@ -308,5 +319,8 @@ namespace NetDump
         private static ClrRuntime cRun = null;
         private static StringBuilder resultOutput = new StringBuilder();
         private static int targetPID = 0;
+        private static string fieldName;
+        private static string MethodName;
+        private static string TypeName;
     }
 }

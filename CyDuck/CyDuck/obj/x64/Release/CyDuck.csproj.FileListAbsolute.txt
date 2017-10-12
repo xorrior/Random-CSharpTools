@@ -1,0 +1,6 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\CyDuck\CyDuck\bin\x64\Release\CyDuck.exe.config
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\CyDuck\CyDuck\bin\x64\Release\CyDuck.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\CyDuck\CyDuck\bin\x64\Release\CyDuck.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\CyDuck\CyDuck\obj\x64\Release\CyDuck.csprojResolveAssemblyReference.cache
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\CyDuck\CyDuck\obj\x64\Release\CyDuck.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\CyDuck\CyDuck\obj\x64\Release\CyDuck.pdb
