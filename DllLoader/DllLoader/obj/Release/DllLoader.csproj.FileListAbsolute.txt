@@ -1,0 +1,4 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\DllLoader\DllLoader\bin\Release\DllLoader.dll
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\DllLoader\DllLoader\bin\Release\DllLoader.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\DllLoader\DllLoader\obj\Release\DllLoader.dll
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\DllLoader\DllLoader\obj\Release\DllLoader.pdb

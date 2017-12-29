@@ -1,0 +1,5 @@
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\ReflectiveLoader\ReflectiveLoader\bin\Debug\ReflectiveLoader.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\ReflectiveLoader\ReflectiveLoader\bin\Debug\ReflectiveLoader.pdb
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\ReflectiveLoader\ReflectiveLoader\obj\Debug\ReflectiveLoader.csprojResolveAssemblyReference.cache
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\ReflectiveLoader\ReflectiveLoader\obj\Debug\ReflectiveLoader.exe
+C:\Users\dso\Documents\GitHub\Random-CSharpTools\ReflectiveLoader\ReflectiveLoader\obj\Debug\ReflectiveLoader.pdb
